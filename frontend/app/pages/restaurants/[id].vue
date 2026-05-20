@@ -32,9 +32,9 @@
           <div class="resto-highlights">
             <h4 class="highlights-title"> L'Expérience</h4>
             <ul class="highlights-list">
-              <li>Ingrédients frais et sélectionnés de saison</li>
-              <li>Atmosphère chaleureuse et raffinée</li>
-              <li>Service personnalisé d'exception</li>
+              <li>- Ingrédients frais et sélectionnés de saison</li>
+              <li>- Atmosphère chaleureuse et raffinée</li>
+              <li>- Service personnalisé d'exception</li>
             </ul>
           </div>
         </div>
@@ -349,13 +349,6 @@ const formatDateLabelShort = (dateStr: string) => {
   padding-left: 20px;
 }
 
-.highlights-list li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: var(--primary);
-  font-weight: 700;
-}
 
 /* Booking Section */
 .booking-section {

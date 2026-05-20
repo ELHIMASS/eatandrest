@@ -38,9 +38,7 @@ defineProps<{
 }
 
 .restaurant-card:hover {
-  transform: translateY(-8px);
   border-color: var(--primary);
-  box-shadow: var(--shadow-gold);
 }
 
 .image-wrapper {
@@ -54,11 +52,6 @@ defineProps<{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: var(--transition-slow);
-}
-
-.restaurant-card:hover .restaurant-image {
-  transform: scale(1.08);
 }
 
 .cuisine-badge {

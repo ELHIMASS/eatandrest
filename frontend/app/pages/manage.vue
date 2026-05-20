@@ -234,8 +234,9 @@ const formatDateLabel = (dateStr: string) => {
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 8px;
-  background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
+  background: var(--primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 

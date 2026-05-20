@@ -4,14 +4,11 @@
     <header class="app-header">
       <div class="container header-container">
         <NuxtLink to="/" class="logo-link">
-          <span class="logo-accent">★</span>
-          <span class="logo-text">EAT <span class="logo-amp">&amp;</span> REST</span>
-          <span class="logo-dot">.</span>
+          <span class="logo-text">Eat &amp; Rest</span>
         </NuxtLink>
         <nav class="header-nav">
           <NuxtLink to="/" class="nav-item" active-class="active">Accueil</NuxtLink>
           <NuxtLink to="/manage" class="btn btn-secondary nav-btn">
-            <span class="nav-btn-icon" style="margin-right: 6px;">★</span>
             <span>Ma Réservation</span>
           </NuxtLink>
         </nav>
@@ -27,7 +24,7 @@
     <footer class="app-footer">
       <div class="container footer-container">
         <div class="footer-brand">
-          <span class="footer-logo">EAT AND REST</span>
+          <span class="footer-logo">Eat &amp; Rest</span>
           <p class="footer-description">Découvrez l'excellence culinaire et réservez instantanément votre table d'exception.</p>
         </div>
         <div class="footer-copyright">
@@ -64,37 +61,14 @@
 .logo-link {
   display: flex;
   align-items: center;
-  gap: 8px;
-}
-
-.logo-accent {
-  color: var(--primary);
-  font-size: 1.4rem;
-  font-weight: 700;
-  animation: spin-slow 20s linear infinite;
 }
 
 .logo-text {
   font-family: var(--font-title);
-  font-weight: 900;
-  font-size: 1.35rem;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  font-size: 1.25rem;
   color: var(--text-primary);
-  transition: var(--transition-fast);
-}
-
-.logo-amp {
-  color: var(--primary);
-  font-family: var(--font-title);
-  font-weight: 400;
-  font-style: italic;
-}
-
-.logo-dot {
-  color: var(--primary);
-  font-size: 1.6rem;
-  line-height: 1;
-  font-weight: 900;
+  letter-spacing: -0.01em;
 }
 
 .logo-link:hover .logo-text {

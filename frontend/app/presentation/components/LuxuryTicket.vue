@@ -1,7 +1,6 @@
 <template>
   <div class="success-screen animate-fade-in">
     <div class="badge-stamp">
-      <div class="stamp-star">★</div>
       <span class="stamp-text">EAT AND REST</span>
     </div>
 
@@ -68,7 +67,7 @@
       <p class="token-help">Copiez le code ci-dessous pour accéder directement à votre réservation depuis la page de gestion :</p>
       
       <div class="copy-row">
-        <span class="copy-row-label">Code de réservation (UUID)</span>
+        <span class="copy-row-label">Code de réservation </span>
         <div class="copy-input-group">
           <input type="text" readonly :value="bookingSuccess.token" class="copy-input font-code" />
           <button @click="$emit('copy-token')" class="btn btn-primary copy-btn-sm">
