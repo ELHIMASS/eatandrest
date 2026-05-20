@@ -1,3 +1,4 @@
+//memoire du serveur ou se trouve les tables
 import {
   Column,
   Entity,

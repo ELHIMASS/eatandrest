@@ -1,9 +1,10 @@
+//Gestion du protocole https
 import type { Request, Response, NextFunction } from "express";
 import { ReservationService } from "../services/ReservationService";
 import type { CancelReservationBodyDto, CreateReservationDto } from "../dtos";
 
 export class ReservationController {
-  constructor(private readonly service: ReservationService) {}
+  constructor(private readonly service: ReservationService) { }
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -14,6 +15,7 @@ export class ReservationController {
       next(e);
     }
   };
+
 
   getByToken = async (req: Request, res: Response, next: NextFunction) => {
     try {

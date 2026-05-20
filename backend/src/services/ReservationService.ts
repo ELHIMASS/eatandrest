@@ -1,3 +1,4 @@
+//cerveau du serveur (couche metier)
 import { v4 as uuidv4 } from "uuid";
 import { Reservation } from "../entities/Reservation";
 import {
@@ -24,7 +25,7 @@ export class ReservationService {
     private readonly reservations = new ReservationRepository(),
     private readonly restaurants = new RestaurantRepository(),
     private readonly slots = new TimeSlotRepository()
-  ) {}
+  ) { }
 
   private validateCreatePayload(body: CreateReservationDto): void {
     assertField(!!body.restaurantId?.trim(), "restaurantId is required", "restaurantId");
