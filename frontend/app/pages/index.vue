@@ -2,17 +2,14 @@
   <div class="home-page container">
     <!-- Hero Section -->
     <section class="hero-section">
-      <h1 class="hero-title animate-fade-in">✦ Tables d'Exception</h1>
+      <h1 class="hero-title animate-fade-in">Tables d'Exception</h1>
       <p class="hero-subtitle animate-fade-in">Découvrez et réservez instantanément les meilleures adresses de la gastronomie.</p>
     </section>
 
     <!-- Filters & Search Bar Panel -->
     <section class="filter-panel glass-panel animate-fade-in">
       <div class="search-wrapper">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
+        <span class="search-icon">🔍</span>
         <input 
           type="text" 
           v-model="searchQuery" 
@@ -45,8 +42,8 @@
     <!-- Content Area -->
     <section class="restaurants-section">
       <!-- Loading State Skeletons -->
-      <div v-if="pending" class="grid-cols-3">
-        <div v-for="i in 6" :key="i" class="restaurant-card skeleton-card">
+      <div v-if="store.isLoading" class="grid-cols-3">
+        <div v-for="i in 6" :key="i" class="restaurant-card-skeleton skeleton-card">
           <div class="skeleton-image"></div>
           <div class="skeleton-info">
             <div class="skeleton-line title"></div>
@@ -58,91 +55,56 @@
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="error-panel glass-panel">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="var(--error)" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
+      <div v-else-if="store.error" class="error-panel glass-panel">
+        <span style="font-size: 2.5rem; margin-bottom: 8px;">⚠️</span>
         <h2>Impossible de charger les restaurants</h2>
-        <p>Le serveur de l'API est hors ligne ou inaccessible. Veuillez vérifier que votre backend est bien actif.</p>
-        <button class="btn btn-secondary" @click="refresh">Réessayer</button>
+        <p>{{ store.error }}</p>
+        <button class="btn btn-secondary" @click="store.fetchRestaurants">Réessayer</button>
       </div>
 
       <!-- Empty State -->
       <div v-else-if="filteredRestaurants.length === 0" class="empty-panel glass-panel">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="var(--text-secondary)" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="8" y1="12" x2="16" y2="12"></line>
-        </svg>
+        <span style="font-size: 2.5rem; margin-bottom: 8px;">🍽️</span>
         <h3>Aucun restaurant trouvé</h3>
         <p>Ajustez votre recherche ou changez de filtre culinaire.</p>
       </div>
 
       <!-- Restaurants Grid -->
       <div v-else class="grid-cols-3 animate-fade-in">
-        <NuxtLink 
-          v-for="restaurant in filteredRestaurants" 
-          :key="restaurant.id" 
-          :to="`/restaurants/${restaurant.id}`" 
-          class="restaurant-card glass-panel"
-        >
-          <div class="image-wrapper">
-            <img :src="restaurant.imageUrl" :alt="restaurant.name" class="restaurant-image" />
-            <div class="cuisine-badge">{{ restaurant.cuisineType }}</div>
-          </div>
-          <div class="restaurant-info">
-            <h2 class="restaurant-name">{{ restaurant.name }}</h2>
-            <div class="restaurant-address">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-              <span>{{ restaurant.address }}</span>
-            </div>
-            <p class="restaurant-desc">{{ restaurant.description }}</p>
-            <div class="card-footer">
-              <span class="view-details">Voir la carte &amp; réserver</span>
-              <span class="arrow-icon">➔</span>
-            </div>
-          </div>
-        </NuxtLink>
+        <RestaurantCard
+          v-for="restaurant in filteredRestaurants"
+          :key="restaurant.id"
+          :restaurant="restaurant"
+        />
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useApi } from '~/composables/useApi'
+import { ref, computed, onMounted } from 'vue'
+import { useRestaurantStore } from '~/stores/restaurantStore'
+import RestaurantCard from '~/presentation/components/RestaurantCard.vue'
 
-// SEO Meta
 useHead({
   title: 'Eat and Rest — Accueil',
 })
 
-const { getRestaurants } = useApi()
+const store = useRestaurantStore()
 
-// Fetch restaurants
-const { data: restaurants, pending, error, refresh } = await useAsyncData(
-  'restaurants',
-  () => getRestaurants()
-)
+onMounted(() => {
+  store.fetchRestaurants()
+})
 
-// Search & Filter State
 const searchQuery = ref('')
 const selectedCuisine = ref<string | null>(null)
 
-// Unique list of cuisines derived from backend data
 const cuisines = computed(() => {
-  if (!restaurants.value) return []
-  return [...new Set(restaurants.value.map(r => r.cuisineType))]
+  return [...new Set(store.restaurants.map(r => r.cuisineType))]
 })
 
-// Filter logic
 const filteredRestaurants = computed(() => {
-  if (!restaurants.value) return []
-  return restaurants.value.filter(r => {
+  return store.restaurants.filter(r => {
     const matchesSearch = 
       r.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       r.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -179,7 +141,6 @@ const filteredRestaurants = computed(() => {
   margin: 0 auto;
 }
 
-/* Filter panel styles */
 .filter-panel {
   display: flex;
   flex-direction: column;
@@ -248,109 +209,6 @@ const filteredRestaurants = computed(() => {
   box-shadow: var(--shadow-gold);
 }
 
-/* Restaurant Card styles */
-.restaurant-card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  height: 100%;
-  transition: var(--transition-normal);
-}
-
-.restaurant-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--primary);
-  box-shadow: var(--shadow-gold);
-}
-
-.image-wrapper {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
-
-.restaurant-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: var(--transition-slow);
-}
-
-.restaurant-card:hover .restaurant-image {
-  transform: scale(1.08);
-}
-
-.cuisine-badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(6, 9, 14, 0.75);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  padding: 4px 12px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  border-radius: var(--radius-full);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.restaurant-info {
-  display: flex;
-  flex-direction: column;
-  padding: 24px;
-  flex-grow: 1;
-}
-
-.restaurant-name {
-  font-size: 1.4rem;
-  margin-bottom: 8px;
-}
-
-.restaurant-address {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-  margin-bottom: 12px;
-}
-
-.restaurant-desc {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 24px;
-  flex-grow: 1;
-}
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 16px;
-}
-
-.view-details {
-  font-family: var(--font-title);
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--primary);
-}
-
-.arrow-icon {
-  color: var(--primary);
-  transition: var(--transition-fast);
-}
-
-.restaurant-card:hover .arrow-icon {
-  transform: translateX(4px);
-}
-
-/* Empty, Error and Skeleton panels */
 .empty-panel, .error-panel {
   display: flex;
   flex-direction: column;
@@ -365,9 +223,15 @@ const filteredRestaurants = computed(() => {
   color: var(--error);
 }
 
-/* Skeletons */
 .skeleton-card {
   pointer-events: none;
+}
+
+.restaurant-card-skeleton {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .skeleton-image {
@@ -421,7 +285,7 @@ const filteredRestaurants = computed(() => {
     90deg,
     rgba(255, 255, 255, 0) 0%,
     rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0) 100-percent
+    rgba(255, 255, 255, 0) 100%
   );
   animation: shimmer 1.5s infinite;
 }

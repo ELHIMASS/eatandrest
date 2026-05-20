@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  // Nuxt Modules
+  modules: ['@pinia/nuxt'],
+
   // Dev server settings
   devServer: {
     port: 5173

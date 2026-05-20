@@ -4,16 +4,14 @@
     <header class="app-header">
       <div class="container header-container">
         <NuxtLink to="/" class="logo-link">
-          <span class="logo-accent">✦</span>
+          <span class="logo-accent">★</span>
           <span class="logo-text">EAT <span class="logo-amp">&amp;</span> REST</span>
           <span class="logo-dot">.</span>
         </NuxtLink>
         <nav class="header-nav">
           <NuxtLink to="/" class="nav-item" active-class="active">Accueil</NuxtLink>
           <NuxtLink to="/manage" class="btn btn-secondary nav-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24" class="nav-btn-icon">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-            </svg>
+            <span class="nav-btn-icon" style="margin-right: 6px;">★</span>
             <span>Ma Réservation</span>
           </NuxtLink>
         </nav>
@@ -29,7 +27,7 @@
     <footer class="app-footer">
       <div class="container footer-container">
         <div class="footer-brand">
-          <span class="footer-logo">✦ EAT AND REST</span>
+          <span class="footer-logo">EAT AND REST</span>
           <p class="footer-description">Découvrez l'excellence culinaire et réservez instantanément votre table d'exception.</p>
         </div>
         <div class="footer-copyright">
