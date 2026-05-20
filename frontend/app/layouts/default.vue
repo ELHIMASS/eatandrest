@@ -1,0 +1,203 @@
+<template>
+  <div class="layout-wrapper">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="container header-container">
+        <NuxtLink to="/" class="logo-link">
+          <span class="logo-accent">✦</span>
+          <span class="logo-text">EAT <span class="logo-amp">&amp;</span> REST</span>
+          <span class="logo-dot">.</span>
+        </NuxtLink>
+        <nav class="header-nav">
+          <NuxtLink to="/" class="nav-item" active-class="active">Accueil</NuxtLink>
+          <NuxtLink to="/manage" class="btn btn-secondary nav-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24" class="nav-btn-icon">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+            <span>Ma Réservation</span>
+          </NuxtLink>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Page Content -->
+    <main class="app-main">
+      <slot />
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="container footer-container">
+        <div class="footer-brand">
+          <span class="footer-logo">✦ EAT AND REST</span>
+          <p class="footer-description">Découvrez l'excellence culinaire et réservez instantanément votre table d'exception.</p>
+        </div>
+        <div class="footer-copyright">
+          &copy; {{ new Date().getFullYear() }} Eat and Rest.
+        </div>
+      </div>
+    </footer>
+  </div>
+</template>
+
+<style scoped>
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250, 248, 245, 0.85); /* Frosted Linen Alabaster */
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 16px 0;
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-accent {
+  color: var(--primary);
+  font-size: 1.4rem;
+  font-weight: 700;
+  animation: spin-slow 20s linear infinite;
+}
+
+.logo-text {
+  font-family: var(--font-title);
+  font-weight: 900;
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  transition: var(--transition-fast);
+}
+
+.logo-amp {
+  color: var(--primary);
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.logo-dot {
+  color: var(--primary);
+  font-size: 1.6rem;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.logo-link:hover .logo-text {
+  color: var(--primary);
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-item {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  position: relative;
+  padding: 4px 0;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: var(--text-primary);
+}
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: var(--transition-normal);
+}
+
+.nav-item:hover::after, .nav-item.active::after {
+  width: 100%;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+}
+
+.app-main {
+  flex-grow: 1;
+  padding: 40px 0;
+}
+
+.app-footer {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: 40px 0;
+  margin-top: 60px;
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.footer-logo {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.footer-description {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.footer-copyright {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border-subtle);
+  width: 100%;
+  padding-top: 20px;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .header-nav {
+    gap: 12px;
+  }
+  .nav-item {
+    display: none; /* Hide text nav on mobile for simplicity */
+  }
+}
+</style>
